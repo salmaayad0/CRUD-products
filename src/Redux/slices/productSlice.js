@@ -25,7 +25,7 @@ export const addProduct = createAsyncThunk('addProduct', async (product, thunk) 
         const { data } = await axios.post('http://localhost:3005/products', product);
         return data
     } catch (error) {
-        return rejectWithValue('There is an ERROR!')
+        return rejectWithValue('ERROR!... in add product')
     }
 })
 
@@ -35,7 +35,7 @@ export const deleteProduct = createAsyncThunk('deleteProduct', async (id, thunk)
         const { data } = await axios.delete(`http://localhost:3005/products/${id}`);
         return id
     } catch (error) {
-        return rejectWithValue('There is an ERROR!')
+        return rejectWithValue('ERROR!...in delete product')
     }
 })
 
@@ -45,9 +45,21 @@ export const detailsProduct = createAsyncThunk('detailsProduct', async (id, thun
         const { data } = await axios.get(`http://localhost:3005/products/${id}`);
         return data
     } catch (error) {
-        return rejectWithValue('There is an ERROR!')
+        return rejectWithValue('ERROR!...in details')
     }
 })
+
+export const updateProduct = createAsyncThunk('updateProduct', async ({id, obj}, thunk) => {
+    const { rejectWithValue } = thunk;
+    try {
+        const { data } = await axios.put(`http://localhost:3005/products/${id}`, obj);
+        return data
+    } catch (error) {
+        return rejectWithValue('ERROR!...in update product')
+    }
+})
+
+
 export const productSlice = createSlice({
     name: 'products',
     initialState,
@@ -114,6 +126,23 @@ export const productSlice = createSlice({
         })
 
         builder.addCase(detailsProduct.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+        })
+
+
+        //update product
+        builder.addCase(updateProduct.pending, state => {
+            state.loading = true;
+            state.error = "";
+        })
+
+        builder.addCase(updateProduct.fulfilled, (state, action) => {
+            state.loading = false;
+            state.item = action.payload;
+        })
+
+        builder.addCase(updateProduct.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })

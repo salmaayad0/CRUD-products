@@ -8,6 +8,7 @@ import Layout from './pages/Layout';
 import Home from './pages/Home';
 import Details from './pages/Details';
 import AddProduct from './pages/AddProduct';
+import UpdateProduct from './pages/UpdateProduct';
 import Products from "./pages/Products";
 import NotFound from './pages/NotFound';
 //redux 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='Products' element={<Products />} />
         <Route path='Products/Add' element={<AddProduct />} />
+        <Route path='Products/update/:id' element={<UpdateProduct />} />
         <Route path='Products/:productId' element={<Details />} />
         <Route path='*' element={<NotFound />} />
       </Route>
